@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  m1-employee:
+    build:
+      context: ./m1-employee-service
+      dockerfile: Dockerfile
+    container_name: m1-employee-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    depends_on:
+      - m2-department
+      - m3-salary
+    networks:
+      - microservices-network
+
+  m2-department:
+    build:
+      context: ./m2-department-service
+      dockerfile: Dockerfile
+    container_name: m2-department-service
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    networks:
+      - microservices-network
+
+  m3-salary:
+    build:
+      context: ./m3-salary-service
+      dockerfile: Dockerfile
+    container_name: m3-salary-service
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
+    driver: bridge
